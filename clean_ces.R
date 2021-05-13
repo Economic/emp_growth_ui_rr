@@ -94,7 +94,11 @@ ces_final <- map(ces_to_join, ~ .x) %>%
     emp_priv,
     emp_rest
   ) %>% 
-  arrange(seasonal, state_fips, month_date)
+  arrange(seasonal, state_fips, month_date) %>% 
+  rename(
+    emp_M50 = emp_M25,
+    rr_M50 = rr_M25
+  )
 
 ces_final %>% 
   filter(seasonal == "S") %>% 
