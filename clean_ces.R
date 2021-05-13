@@ -78,7 +78,23 @@ ces_final <- map(ces_to_join, ~ .x) %>%
     month_date >= ym("2020m8") & month_date <= ym("2020m12") ~ 2,
     month_date >= ym("2021m1") ~ 3
   )) %>% 
-  inner_join(state_period_rrs, by = c("state_fips", "period"))
+  inner_join(state_period_rrs, by = c("state_fips", "period")) %>% 
+  mutate(year = year(month_date), month = month(month_date)) %>% 
+  relocate(
+    seasonal, 
+    state_fips,
+    year,
+    month, 
+    month_date, 
+    period,
+    matches("emp_\\w25"),
+    matches("r_\\w25"),
+    matches("emp_\\w33"),
+    matches("r_\\w33"),
+    emp_priv,
+    emp_rest
+  ) %>% 
+  arrange(seasonal, state_fips, month_date)
 
 ces_final %>% 
   filter(seasonal == "S") %>% 
